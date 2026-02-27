@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Inter, system-ui, sans-serif; font-size: 12px; color: #333; padding: 16px; }
+    h2 { font-size: 14px; margin-bottom: 4px; }
+    .subtitle { color: #888; margin-bottom: 16px; font-size: 11px; }
+    .stats { display: flex; gap: 12px; margin-bottom: 16px; }
+    .stat { background: #f5f5f5; border-radius: 8px; padding: 10px 14px; flex: 1; text-align: center; }
+    .stat-value { font-size: 20px; font-weight: 700; color: #333; }
+    .stat-label { font-size: 10px; color: #888; margin-top: 2px; }
+    .match-list { max-height: 300px; overflow-y: auto; margin-bottom: 16px; }
+    .match-item { display: flex; align-items: center; padding: 8px 10px; border-radius: 6px; margin-bottom: 4px; }
+    .match-item:hover { background: #f5f5f5; }
+    .match-icon { width: 8px; height: 8px; border-radius: 50%; margin-right: 10px; flex-shrink: 0; }
+    .match-icon.matched { background: #0d9; }
+    .match-icon.unmatched { background: #f44; }
+    .match-frame { flex: 1; font-weight: 500; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .match-arrow { color: #bbb; margin: 0 6px; flex-shrink: 0; }
+    .match-component { color: #0b8; font-weight: 500; cursor: pointer; text-decoration: underline dotted; max-width: 160px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex-shrink: 0; }
+    .match-component:hover { color: #096; }
+    .match-none { color: #f44; font-style: italic; cursor: pointer; text-decoration: underline dotted; }
+    .match-none:hover { color: #c00; }
+    .match-count { color: #888; font-size: 10px; margin-left: 6px; flex-shrink: 0; }
+    .match-locate { width: 20px; height: 20px; border: none; background: none; cursor: pointer; color: #aaa; font-size: 14px; padding: 0; margin-left: 4px; flex-shrink: 0; border-radius: 4px; display: flex; align-items: center; justify-content: center; }
+    .match-locate:hover { background: #e8e8e8; color: #333; }
+    .section-title { font-size: 11px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin: 12px 0 8px; }
+    .actions { display: flex; gap: 8px; }
+    .btn { flex: 1; padding: 10px; border: none; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; }
+    .btn-primary { background: #18a0fb; color: white; }
+    .btn-primary:hover { background: #0c8ce9; }
+    .btn-primary:disabled { background: #ccc; cursor: not-allowed; }
+    .btn-secondary { background: #f5f5f5; color: #333; }
+    .btn-secondary:hover { background: #e8e8e8; }
+    .empty { text-align: center; padding: 40px 16px; color: #888; }
+    .empty-icon { font-size: 32px; margin-bottom: 8px; }
+    .tip { background: #fff8e6; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 11px; color: #996600; }
+
+    /* Loading */
+    .loading { text-align: center; padding: 60px 16px; }
+    .spinner { width: 32px; height: 32px; border: 3px solid #eee; border-top-color: #18a0fb; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-text { color: #888; font-size: 13px; }
+
+    /* Modal */
+    .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); z-index: 100; display: flex; align-items: center; justify-content: center; }
+    .modal { background: white; border-radius: 12px; width: 340px; max-height: 400px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
+    .modal-header { padding: 14px 16px 0; }
+    .modal-header h3 { font-size: 13px; margin-bottom: 4px; }
+    .modal-header p { font-size: 11px; color: #888; margin-bottom: 10px; }
+    .modal-search { width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 12px; outline: none; }
+    .modal-search:focus { border-color: #18a0fb; }
+    .modal-list { flex: 1; overflow-y: auto; padding: 8px; }
+    .modal-item { padding: 8px 10px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+    .modal-item:hover { background: #f0f7ff; }
+    .modal-item-name { font-weight: 500; flex: 1; }
+    .modal-item-label { font-size: 10px; color: #888; background: #f0f0f0; padding: 2px 6px; border-radius: 4px; }
+    .modal-item-label.local { background: #e6f7ed; color: #0a6; }
+    .modal-item-label.medsoft { background: #fff3e0; color: #c60; }
+    .modal-item-label.magna { background: #e8eaf6; color: #36c; }
+    .modal-footer { padding: 12px 16px; border-top: 1px solid #eee; display: flex; gap: 8px; }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <h2>Component Swapper</h2>
+    <p class="subtitle">Carregando...</p>
+  </div>
+
+  <script>
+    const app = document.getElementById('app');
+    let currentData = null;
+    let allComponents = [];
+    let overrides = {};
+
+    window.onmessage = (event) => {
+      const msg = event.data.pluginMessage;
+      if (!msg) return;
+
+      if (msg.type === 'scan-results') {
+        currentData = msg.data;
+        allComponents = msg.data.allComponents || [];
+        overrides = {};
+        renderResults(msg.data);
+      }
+      if (msg.type === 'swap-complete') renderComplete(msg.data);
+      if (msg.type === 'no-selection') renderNoSelection();
+    };
+
+    // --- Tela: sem selecao ---
+    function renderNoSelection() {
+      app.innerHTML = `
+        <h2>Component Swapper</h2>
+        <div class="empty">
+          <div class="empty-icon" style="font-size:40px">&#9757;</div>
+          <p style="margin-bottom:8px"><strong>Selecione um frame</strong></p>
+          <p>Selecione no Figma o frame (ou tela) que deseja converter, depois clique em Escanear.</p>
+        </div>
+        <div class="actions">
+          <button class="btn btn-secondary" onclick="send('close')">Fechar</button>
+          <button class="btn btn-primary" onclick="send('rescan')">Escanear</button>
+        </div>
+      `;
+    }
+
+    // --- Tela: loading ---
+    function renderLoading() {
+      app.innerHTML = `
+        <h2>Component Swapper</h2>
+        <div class="loading">
+          <div class="spinner"></div>
+          <div class="loading-text">Substituindo componentes...</div>
+        </div>
+      `;
+    }
+
+    // --- Tela: resultados ---
+    function renderResults(data) {
+      const { matched, unmatched, components } = data;
+      const total = matched.length + unmatched.length;
+
+      if (total === 0) {
+        app.innerHTML = `
+          <h2>Component Swapper</h2>
+          <div class="empty">
+            <div class="empty-icon">OK</div>
+            <p>Nenhum frame solto encontrado na selecao.<br>Tudo ja esta componentizado!</p>
+          </div>
+          <div class="actions">
+            <button class="btn btn-secondary" onclick="send('close')">Fechar</button>
+            <button class="btn btn-primary" onclick="send('rescan')">Re-escanear</button>
+          </div>
+        `;
+        return;
+      }
+
+      let html = `
+        <h2>Component Swapper</h2>
+        <p class="subtitle">${data.scope}</p>
+        <div class="stats">
+          <div class="stat"><div class="stat-value">${matched.length}</div><div class="stat-label">Com match</div></div>
+          <div class="stat"><div class="stat-value">${unmatched.length}</div><div class="stat-label">Sem match</div></div>
+        </div>
+        <div class="tip">Clique no nome do componente para trocar o match.</div>
+        <div class="match-list">
+      `;
+
+      if (matched.length > 0) {
+        html += '<div class="section-title">Com match</div>';
+        for (const m of matched) {
+          const ov = overrides[m.frameName];
+          const compName = ov === null ? '<em>removido</em>' : (ov ? ov.componentName : m.componentName);
+          const removed = ov === null;
+          html += matchRow(m.frameName, compName, m.count, !removed);
+        }
+      }
+
+      if (unmatched.length > 0) {
+        html += '<div class="section-title">Sem match</div>';
+        for (const u of unmatched) {
+          const ov = overrides[u.frameName];
+          const hasOv = ov && ov !== null;
+          html += matchRow(u.frameName, hasOv ? ov.componentName : 'clique para selecionar', u.count, hasOv);
+        }
+      }
+
+      html += `</div>
+        <div class="actions">
+          <button class="btn btn-secondary" onclick="send('rescan')">Re-escanear</button>
+          <button class="btn btn-primary" id="btn-swap" onclick="doSwap()">Substituir</button>
+        </div>
+      `;
+      app.innerHTML = html;
+    }
+
+    function matchRow(frameName, compName, count, isMatched) {
+      const safe = frameName.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+      return `
+        <div class="match-item">
+          <div class="match-icon ${isMatched ? 'matched' : 'unmatched'}"></div>
+          <span class="match-frame" title="${safe}">${frameName}</span>
+          <button class="match-locate" title="Localizar no Figma" onclick="event.stopPropagation(); parent.postMessage({ pluginMessage: { type: 'locate', frameName: '${safe}' } }, '*')">&#8982;</button>
+          <span class="match-arrow">&rarr;</span>
+          <span class="${isMatched ? 'match-component' : 'match-none'}" onclick="openPicker('${safe}')">${compName}</span>
+          <span class="match-count">x${count}</span>
+        </div>
+      `;
+    }
+
+    // --- Swap ---
+    function doSwap() {
+      renderLoading();
+      // Converte overrides para formato simples (sem funcoes)
+      const clean = {};
+      for (const [k, v] of Object.entries(overrides)) {
+        if (v === null) {
+          clean[k] = null;
+        } else if (v) {
+          clean[k] = { componentId: v.componentId };
+        }
+      }
+      parent.postMessage({ pluginMessage: { type: 'swap', overrides: clean } }, '*');
+    }
+
+    // --- Completo ---
+    function renderComplete(data) {
+      app.innerHTML = `
+        <h2>Component Swapper</h2>
+        <div class="empty">
+          <div class="empty-icon" style="font-size:40px">&#127881;</div>
+          <p><strong>${data.swapped} frame${data.swapped !== 1 ? 's' : ''}</strong> substituido${data.swapped !== 1 ? 's' : ''} por componentes!</p>
+          ${data.errors > 0 ? '<p style="color:#f44;margin-top:8px">' + data.errors + ' erro(s)</p>' : ''}
+        </div>
+        <div class="actions">
+          <button class="btn btn-primary" onclick="send('close')">Fechar</button>
+        </div>
+      `;
+    }
+
+    // --- Picker modal ---
+    function openPicker(frameName) {
+      const overlay = document.createElement('div');
+      overlay.className = 'modal-overlay';
+      overlay.onclick = (e) => { if (e.target === overlay) overlay.remove(); };
+
+      overlay.innerHTML = `
+        <div class="modal">
+          <div class="modal-header">
+            <h3>Trocar componente</h3>
+            <p>Frame: <strong>${frameName}</strong></p>
+            <input class="modal-search" placeholder="Buscar componente..." />
+          </div>
+          <div class="modal-list" id="modal-list">${compListHtml(allComponents)}</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" style="flex:1" onclick="this.closest('.modal-overlay').remove()">Cancelar</button>
+            <button class="btn btn-secondary" style="flex:1;color:#f44" onclick="pickRemove('${frameName.replace(/'/g, "\\'")}')">Remover</button>
+          </div>
+        </div>
+      `;
+
+      document.body.appendChild(overlay);
+
+      const input = overlay.querySelector('.modal-search');
+      input.addEventListener('input', (e) => {
+        const q = e.target.value.toLowerCase();
+        const items = q ? allComponents.filter(c => c.name.toLowerCase().includes(q) || c.label.toLowerCase().includes(q)) : allComponents;
+        overlay.querySelector('#modal-list').innerHTML = compListHtml(items);
+      });
+
+      // Bind click events via delegation
+      overlay.querySelector('#modal-list').addEventListener('click', (e) => {
+        const item = e.target.closest('.modal-item');
+        if (!item) return;
+        const id = item.dataset.id;
+        const name = item.dataset.name;
+        const label = item.dataset.label;
+        overrides[frameName] = { componentId: id, componentName: name + ' (' + label + ')', label: label };
+        overlay.remove();
+        renderResults(currentData);
+      });
+
+      setTimeout(() => input.focus(), 50);
+    }
+
+    function compListHtml(items) {
+      if (!items.length) return '<div style="padding:16px;text-align:center;color:#888">Nenhum componente encontrado</div>';
+      return items.map(c => {
+        const lc = c.label === 'local' ? 'local' : (c.label === 'MEDSoft' ? 'medsoft' : 'magna');
+        return '<div class="modal-item" data-id="' + esc(c.id) + '" data-name="' + esc(c.name) + '" data-label="' + esc(c.label) + '">'
+          + '<span class="modal-item-name">' + c.name + '</span>'
+          + '<span class="modal-item-label ' + lc + '">' + c.label + '</span>'
+          + '</div>';
+      }).join('');
+    }
+
+    function pickRemove(frameName) {
+      overrides[frameName] = null;
+      document.querySelector('.modal-overlay').remove();
+      renderResults(currentData);
+    }
+
+    function esc(s) { return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;'); }
+    function send(type) { parent.postMessage({ pluginMessage: { type: type } }, '*'); }
+  </script>
+</body>
+</html>
