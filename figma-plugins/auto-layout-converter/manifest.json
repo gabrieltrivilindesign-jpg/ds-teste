@@ -1,0 +1,9 @@
+{
+  "name": "Auto Layout Converter",
+  "id": "auto-layout-converter-medsoft",
+  "api": "1.0.0",
+  "main": "code.js",
+  "capabilities": [],
+  "enableProposedApi": false,
+  "editorType": ["figma"]
+}

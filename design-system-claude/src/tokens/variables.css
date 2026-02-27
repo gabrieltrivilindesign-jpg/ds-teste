@@ -1,0 +1,267 @@
+/* ==========================================================================
+   Design Tokens — Magna Vita (MEDSoft 2.0)
+   Generated from Figma file: 12. Magna Vita
+   Extracted: 2026-02-25
+   ========================================================================== */
+
+:root {
+  /* -----------------------------------------------------------------------
+     Colors — Primitives
+     ----------------------------------------------------------------------- */
+  --mv-color-primary-300: #eff797;
+  --mv-color-primary-500: #d9ea19;
+  --mv-color-secondary-500: #eaeaea;
+  --mv-color-background-0: #fcfcfc;
+  --mv-color-background-300: #e0e0e0;
+  --mv-color-background-600: #a3a3a3;
+  --mv-color-background-700: #7a7a7a;
+  --mv-color-background-900: #292929;
+  --mv-color-background-muted: #f3f3f3;
+  --mv-color-typography-0: #f9f9f9;
+  --mv-color-typography-400: #999999;
+  --mv-color-typography-600: #606060;
+  --mv-color-typography-700: #4d4d4d;
+  --mv-color-typography-800: #404040;
+  --mv-color-typography-900: #333333;
+  --mv-color-border-200: #e5e5e5;
+  --mv-color-border-300: #d9d9d9;
+  --mv-color-divider: #ebeeef;
+  --mv-color-green-500: #15a147;
+  --mv-color-green-400: #2e9a74;
+  --mv-color-red-500: #cc3242;
+  --mv-color-orange-500: #cc874a;
+  --mv-color-blue-500: #5271cc;
+  --mv-color-yellow-500: #f5ed00;
+  --mv-color-yellow-400: #d8ea1a;
+  --mv-color-black: #000000;
+  --mv-color-white: #ffffff;
+  --mv-color-toast-border: #e9e9e9;
+  --mv-color-toast-body: #434343;
+
+  /* -----------------------------------------------------------------------
+     Colors — Semantic
+     ----------------------------------------------------------------------- */
+  --mv-color-primary: #d9ea19;
+  --mv-color-primary-light: #eff797;
+  --mv-color-primary-foreground: #000000;
+  --mv-color-secondary: #eaeaea;
+  --mv-color-background: #fcfcfc;
+  --mv-color-background-muted: #f3f3f3;
+  --mv-color-foreground: #333333;
+  --mv-color-muted-foreground: #7a7a7a;
+  --mv-color-border: #e5e5e5;
+  --mv-color-border-strong: #d9d9d9;
+  --mv-color-accent: #f5ed00;
+  --mv-color-card-background: rgba(255, 255, 255, 0.03);
+  --mv-color-success-foreground: #2e9a74;
+  --mv-color-success-background: #d8f2e9;
+  --mv-color-error-foreground: #cc3242;
+  --mv-color-error-background: #ffd9dc;
+  --mv-color-warning-foreground: #cc874a;
+  --mv-color-warning-background: #ffeedf;
+  --mv-color-info-foreground: #5271cc;
+  --mv-color-info-background: #e1e8ff;
+  --mv-color-icon: #000000;
+  --mv-color-fab-background: #f5ed00;
+  --mv-color-toast-success-icon: #15a147;
+
+  /* -----------------------------------------------------------------------
+     Typography
+     ----------------------------------------------------------------------- */
+  --mv-font-family-primary: "Poppins", sans-serif;
+  --mv-font-family-ui: "FS Emeric", sans-serif;
+
+  /* heading-lg */
+  --mv-font-size-heading-lg: 1.25rem;
+  --mv-font-weight-heading-lg: 600;
+  --mv-line-height-heading-lg: normal;
+  --mv-letter-spacing-heading-lg: 0.2px;
+
+  /* body-lg */
+  --mv-font-size-body-lg: 1rem;
+  --mv-font-weight-body-lg: 400;
+  --mv-line-height-body-lg: 1.5;
+  --mv-letter-spacing-body-lg: normal;
+
+  /* body-md */
+  --mv-font-size-body-md: 0.875rem;
+  --mv-font-weight-body-md: 400;
+  --mv-line-height-body-md: 1.5;
+  --mv-letter-spacing-body-md: normal;
+
+  /* subtitle-md */
+  --mv-font-size-subtitle-md: 1.125rem;
+  --mv-font-weight-subtitle-md: 600;
+  --mv-line-height-subtitle-md: 1.2;
+  --mv-letter-spacing-subtitle-md: normal;
+
+  /* label-sm */
+  --mv-font-size-label-sm: 0.875rem;
+  --mv-font-weight-label-sm: 700;
+  --mv-line-height-label-sm: normal;
+  --mv-letter-spacing-label-sm: normal;
+
+  /* button-xs */
+  --mv-font-size-button-xs: 0.75rem;
+  --mv-font-weight-button-xs: 500;
+  --mv-line-height-button-xs: normal;
+  --mv-letter-spacing-button-xs: normal;
+
+  /* select-sm */
+  --mv-font-size-select-sm: 0.875rem;
+  --mv-font-weight-select-sm: 400;
+  --mv-line-height-select-sm: 1.5;
+  --mv-letter-spacing-select-sm: normal;
+
+  /* -----------------------------------------------------------------------
+     Spacing
+     ----------------------------------------------------------------------- */
+  --mv-spacing-0: 0px;
+  --mv-spacing-1: 4px;
+  --mv-spacing-1-5: 6px;
+  --mv-spacing-2: 8px;
+  --mv-spacing-2-5: 10px;
+  --mv-spacing-3: 12px;
+  --mv-spacing-3-5: 14px;
+  --mv-spacing-4: 16px;
+  --mv-spacing-5: 20px;
+  --mv-spacing-6: 24px;
+  --mv-spacing-8: 32px;
+  --mv-spacing-9: 36px;
+  --mv-spacing-10: 40px;
+  --mv-spacing-12: 48px;
+
+  /* -----------------------------------------------------------------------
+     Border Radius
+     ----------------------------------------------------------------------- */
+  --mv-radius-none: 0px;
+  --mv-radius-xs: 4px;
+  --mv-radius-sm: 6px;
+  --mv-radius-md: 8px;
+  --mv-radius-2xl: 24px;
+  --mv-radius-3xl: 48px;
+  --mv-radius-full: 9999px;
+
+  /* -----------------------------------------------------------------------
+     Shadows
+     ----------------------------------------------------------------------- */
+  --mv-shadow-sm: 0px 2px 12px 0px rgba(0, 0, 0, 0.05);
+  --mv-shadow-md: 0px 3px 10px 0px rgba(38, 38, 38, 0.2);
+  --mv-shadow-inset-focus: inset 0px 0px 0px 0px rgba(0, 0, 0, 0);
+
+  /* -----------------------------------------------------------------------
+     Border Width
+     ----------------------------------------------------------------------- */
+  --mv-border-width-0: 0px;
+  --mv-border-width-1: 1px;
+  --mv-border-width-1-5: 1.5px;
+  --mv-border-width-stroke-md: 1.5px;
+
+  /* -----------------------------------------------------------------------
+     Opacity
+     ----------------------------------------------------------------------- */
+  --mv-opacity-0: 0;
+  --mv-opacity-100: 1;
+
+  /* -----------------------------------------------------------------------
+     Components — Icon
+     ----------------------------------------------------------------------- */
+  --mv-icon-xs: 14px;
+  --mv-icon-sm: 16px;
+  --mv-icon-md: 18px;
+  --mv-icon-lg: 20px;
+  --mv-icon-xl: 24px;
+  --mv-icon-stroke-width: 1.5px;
+  --mv-icon-color: #000000;
+
+  /* -----------------------------------------------------------------------
+     Components — Image
+     ----------------------------------------------------------------------- */
+  --mv-image-xs: 40px;
+
+  /* -----------------------------------------------------------------------
+     Components — Avatar
+     ----------------------------------------------------------------------- */
+  --mv-avatar-sm: 32px;
+
+  /* -----------------------------------------------------------------------
+     Components — Card
+     ----------------------------------------------------------------------- */
+  --mv-card-lg-padding: 32px;
+  --mv-card-lg-border-radius: 48px;
+  --mv-card-muted-elevated-bg: rgba(255, 255, 255, 0.03);
+
+  /* -----------------------------------------------------------------------
+     Components — Button
+     ----------------------------------------------------------------------- */
+  --mv-button-font-family: "FS Emeric", sans-serif;
+  --mv-button-font-weight: 500;
+  --mv-button-xs-font-size: 12px;
+  --mv-button-xs-icon-size: 14px;
+  --mv-button-xs-gap: 8px;
+  --mv-button-xs-height: 32px;
+  --mv-button-xs-padding-horizontal: 18px;
+  --mv-button-border-radius: 9999px;
+  --mv-button-border-width: 1px;
+  --mv-button-stroke-width: 1.5px;
+  --mv-button-solid-primary-fg: #000000;
+  --mv-button-solid-primary-bg: #f5ed00;
+
+  /* -----------------------------------------------------------------------
+     Components — Badge
+     ----------------------------------------------------------------------- */
+  --mv-badge-font-family: "FS Emeric", sans-serif;
+  --mv-badge-font-weight: 700;
+  --mv-badge-sm-font-size: 14px;
+  --mv-badge-sm-icon-size: 12px;
+  --mv-badge-sm-gap: 4px;
+  --mv-badge-sm-padding-horizontal: 10px;
+  --mv-badge-sm-padding-vertical: 6px;
+  --mv-badge-border-radius: 9999px;
+  --mv-badge-border-width: 1px;
+  --mv-badge-stroke-width: 1.5px;
+  --mv-badge-solid-success-fg: #2e9a74;
+  --mv-badge-solid-success-bg: #d8f2e9;
+  --mv-badge-solid-error-fg: #cc3242;
+  --mv-badge-solid-error-bg: #ffd9dc;
+  --mv-badge-solid-warning-fg: #cc874a;
+  --mv-badge-solid-warning-bg: #ffeedf;
+  --mv-badge-solid-info-fg: #5271cc;
+  --mv-badge-solid-info-bg: #e1e8ff;
+  --mv-badge-solid-border: transparent;
+
+  /* -----------------------------------------------------------------------
+     Components — Divider
+     ----------------------------------------------------------------------- */
+  --mv-divider-bg: #ebeeef;
+  --mv-divider-vertical-width: 1px;
+  --mv-divider-horizontal-height: 1px;
+
+  /* -----------------------------------------------------------------------
+     Components — Fab
+     ----------------------------------------------------------------------- */
+  --mv-fab-bg: #f5ed00;
+  --mv-fab-border-radius: 9999px;
+  --mv-fab-lg-icon-size: 20px;
+  --mv-fab-lg-padding: 16px;
+  --mv-fab-shadow: 0px 3px 10px 0px rgba(38, 38, 38, 0.2);
+
+  /* -----------------------------------------------------------------------
+     Components — Progress
+     ----------------------------------------------------------------------- */
+  --mv-progress-bar-color: #d8ea1a;
+  --mv-progress-track-color: #ebeeef;
+  --mv-progress-md-height: 12px;
+  --mv-progress-2xl-height: 24px;
+  --mv-progress-border-radius: 9999px;
+
+  /* -----------------------------------------------------------------------
+     Components — Select
+     ----------------------------------------------------------------------- */
+  --mv-select-sm-height: 36px;
+  --mv-select-border-radius: 6px;
+  --mv-select-border-color: #d9d9d9;
+  --mv-select-text-color: #333333;
+  --mv-select-font-family: "Poppins", sans-serif;
+  --mv-select-font-size: 14px;
+}
